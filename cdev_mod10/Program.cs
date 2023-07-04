@@ -1,40 +1,18 @@
-﻿using System; 
+﻿using System;
+using System.Runtime.CompilerServices;
 
-namespace Cdev_Interfaces
+namespace cdev_mod10
 {
     class Program 
     {
-      
+        
+        static ILogger Logger { get; set; }
         static void Main(string[] args) 
         {
-            Calculator calc = new Calculator();
-            while (true)
-            {
-                try
-                {
-                    Console.WriteLine("Введите первое слагаемое: ");
-                    decimal num1 = Convert.ToDecimal(Console.ReadLine());
-
-                    Console.WriteLine("Введите второе слагаемое");
-                    decimal num2 = Convert.ToDecimal(Console.ReadLine());
-
-                    Console.WriteLine($"Сумма: {calc.Sum(num1, num2)}");
-
-                }
-                catch (IOException ex) { Console.WriteLine(ex); }
-                catch (OutOfMemoryException ex) { Console.WriteLine(ex); }
-                catch (ArgumentOutOfRangeException ex) { Console.WriteLine(ex); }
-                catch (FormatException ex) { Console.WriteLine(ex); }
-                catch (OverflowException ex) { Console.WriteLine(ex); }
-                finally
-                {
-                    Console.WriteLine("Для продолжения нажмите Enter");
-                    Console.ReadLine();
-                    Console.Clear();
-                }
-                
-            }
-                
+            Logger = new Logger();
+            var calc = new Calculator(Logger);
+            calc.Work();
+            Console.ReadKey();      
         }
     }
 
@@ -43,9 +21,15 @@ namespace Cdev_Interfaces
         decimal Sum(decimal num1, decimal num2);
     }
 
-    public class Calculator : ISum
+    public interface ILogger
     {
-        public decimal Sum(decimal num1, decimal num2) => num1 + num2;
+        void Error(string message);
+        void Event(string message);
+    }
+
+    public interface IWorker
+    {
+        void Work();
     }
 }
 
